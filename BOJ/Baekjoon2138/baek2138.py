@@ -1,35 +1,38 @@
 import sys
 
 n = int(sys.stdin.readline())
-a_list = list(map(int, sys.stdin.readline().rstrip()))
-b_list = list(map(int, sys.stdin.readline().rstrip()))
-cnt = 0
+before = list(map(int, sys.stdin.readline().rstrip()))
+after = list(map(int, sys.stdin.readline().rstrip()))
 
-def toggle_plus(i):
-    for x in range(i, i+2):
-        a_list[x] = 1 - a_list[x]
-def toggle_minus(i):
-    for x in range(i, i-2, -1):
-        a_list[x] = 1 - a_list[x]
-def toggle(i):
-    for x in range(i-1, i+2):
-        a_list[x] = 1 - a_list[x]
 
-for i in range(n):
-    if a_list != b_list:
-        if i == 0:
-            toggle_plus(i)
-            cnt += 1
-        elif i == n-1:
-            toggle_minus(i)
-            cnt += 1
-        else:
-            toggle(i)
-            cnt += 1
+def start(count):
+    temp = count
+    temp_arr = before[:]
+    if temp == 1:
+        temp_arr[1] = 1 - temp_arr[1]
+        temp_arr[0] = 1 - temp_arr[0]
+    for i in range(1,n):
+        if temp_arr[i-1] != after[i-1]:
+            temp += 1
+            temp_arr[i-1] = 1 - temp_arr[i-1]
+            temp_arr[i] = 1 - temp_arr[i]
+            if i != n-1:
+                temp_arr[i+1] = 1 - temp_arr[i+1]
+    if temp_arr == after:
+        return temp
     else:
-        break
+        return -1
+            
+con1 = start(0)
+con2 = start(1)
 
-if a_list == b_list:
-    print(cnt)
+if con1 >= 0 and con2 >= 0:
+    print(min(con1,con2))
+elif con1 < 0 and con2 >= 0:
+    print(con2)
+elif con1 >= 0 and con2 < 0:
+    print(con1)
 else:
     print(-1)
+
+
